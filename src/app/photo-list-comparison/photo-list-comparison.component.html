@@ -1,5 +1,78 @@
-<div>
-    <mat-toolbar color="primary">
-        <span>Photo Comparison App</span>
-    </mat-toolbar>
+<mat-toolbar color="primary">
+  <span>Photo Comparison App</span>
+</mat-toolbar>
+<div class="text-center mt-3">
+  <h2>Photo List</h2>
 </div>
+<div class="row m-1">
+  <div class="col-md-3 mb-4" *ngFor="let photo of this.photoList; index as i">
+    <mat-card class="example-card">
+      <img class="pointer" mat-card-image [src]="photo.url" alt="Dummy Image"
+        (click)="this.addPhotoToCompare(i, photo.id)">
+      <mat-card-content>
+        <p class="title-text">{{photo.title}}</p>
+        <div class="row">
+          <div class="col-md"><span>Id: {{photo.id}}</span></div>
+          <div class="col-auto">
+            <a href="{{photo.url}}" target="_blank" class="btn btn-primary" matTooltip="click to open link">
+              <i class="ri-link"></i>
+            </a>
+          </div>
+        </div>
+      </mat-card-content><!-- Photo Card Content -->
+      <mat-card-actions>
+        <button class="btn action-btn btn-primary" *ngIf="!photo.isCompared"
+          (click)="this.addPhotoToCompare(i, photo.id)">
+          <i class="ri-add-circle-line mr-1"></i> Compare
+        </button>
+        <button class="btn action-btn btn-danger" *ngIf="photo.isCompared"
+          (click)="this.removePhotoFromCompare(i, photo.id)">
+          <i class="ri-indeterminate-circle-line mr-1"></i> Remove
+        </button>
+      </mat-card-actions><!-- Photo Action Buttons -->
+    </mat-card><!-- Mat Card -->
+  </div><!-- Photo Grid Col-md-3 -->
+</div><!-- Photo Grid Row -->
+
+<div class="text-center">
+  <button class="btn btn-primary mb-3" type="button" (click)="this.loadMorePhotos()">
+    Load More Photos <i class="ri-arrow-down-circle-line ml-1"></i>
+  </button>
+</div><!-- Data Action Buttons -->
+
+<hr>
+<div class="comparison-section">
+  <h2 class="text-center">
+    Comparison Table
+  </h2>
+  <div class="table-responsive material-table mt-3" *ngIf="this.comparisonArray && this.comparisonArray.length > 0; else NoData">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Photo</th>
+          <th>ID</th>
+          <th>Url</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let photo of this.comparisonArray; index as i">
+          <td>{{i + 1}}</td>
+          <td>
+            <img class="pointer thumbnail-img" [src]="photo.thumbnailUrl" alt="Dummy Image">
+          </td>
+          <td>{{photo.id}}</td>
+          <td>{{photo.url}}</td>
+          <td>{{photo.title}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #NoData>
+    <div class="text-center">
+      <button class="btn btn-danger my-3">Please add Photos to compare!</button>
+    </div>
+  </ng-template>
+</div>
+
